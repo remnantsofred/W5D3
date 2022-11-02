@@ -1,4 +1,6 @@
 require_relative 'questiondatabase'
+require_relative 'user'
+
 class Question 
   attr_accessor :id, :title, :body, :user_id
 
@@ -37,4 +39,9 @@ class Question
     SQL
     Question.new(question.first)
   end
+
+  def author
+   User.find_by_id(user_id)
+  end
+
 end

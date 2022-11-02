@@ -1,4 +1,6 @@
 require_relative 'questiondatabase'
+#question.rb and user.rb require this file (user.rb)
+
 class User 
   attr_accessor :id, :fname, :lname
 
