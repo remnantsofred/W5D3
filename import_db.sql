@@ -1,4 +1,9 @@
 PRAGMA foreign_keys = ON;
+DROP TABLE IF EXISTS question_follows;
+DROP TABLE IF EXISTS question_likes;
+DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id INTEGER PRIMARY KEY,
@@ -36,13 +41,13 @@ CREATE TABLE replies(
   FOREIGN KEY (parent_reply_id) REFERENCES replies(id)
 );
 
- INSERT INTO
-  replies(question_id, parent_reply_id, user_id, body)
-  VALUES (
-    (SELECT id 
-    FROM questions
-    WHERE users.fname = 'Daphne')
-  )
+--  INSERT INTO
+--   replies(question_id, parent_reply_id, user_id, body)
+--   VALUES (
+--     (SELECT id 
+--     FROM questions
+--     WHERE question.title = 'Schedule')
+--   )
 
 
 
@@ -71,14 +76,18 @@ VALUES
   ('Schedule', 'What is the schedule', (
     SELECT id 
     FROM users 
-    WHERE users.fname = 'Daphne'
+    WHERE users.fname = 'Daphne' 
+    AND
+    users.lname = 'Lam'
     )
   ),
     ('Assessment', 'When is the assessment', (
     SELECT id 
     FROM users 
     WHERE users.fname = 'Bikramjit'
+    AND
+    users.lname = 'Singh'
     )
-  ),
+  );
 
  
