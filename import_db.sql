@@ -36,6 +36,19 @@ CREATE TABLE replies(
   FOREIGN KEY (parent_reply_id) REFERENCES replies(id)
 );
 
+ INSERT INTO
+  replies(question_id, parent_reply_id, user_id, body)
+  VALUES (
+    (SELECT id 
+    FROM questions
+    WHERE users.fname = 'Daphne')
+  )
+
+
+
+
+
+
 CREATE TABLE question_likes(
   id INTEGER PRIMARY KEY,
   user_id INTEGER NOT NULL,
@@ -48,4 +61,24 @@ CREATE TABLE question_likes(
 INSERT INTO
   users (fname, lname)
 VALUES
-  ('John', '')
+  ('John', 'Doe'),
+  ('Daphne', 'Lam'),
+  ('Bikramjit', 'Singh');
+
+INSERT INTO
+  questions (title, body, user_id)
+VALUES
+  ('Schedule', 'What is the schedule', (
+    SELECT id 
+    FROM users 
+    WHERE users.fname = 'Daphne'
+    )
+  ),
+    ('Assessment', 'When is the assessment', (
+    SELECT id 
+    FROM users 
+    WHERE users.fname = 'Bikramjit'
+    )
+  ),
+
+ 
