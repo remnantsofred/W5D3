@@ -1,5 +1,6 @@
 require_relative 'questiondatabase'
 require_relative 'user'
+require_relative 'question'
 
 class Reply
   attr_accessor :id, :question_id, :parent_reply_id, :user_id, :body
@@ -15,6 +16,19 @@ class Reply
     @body = options['body']
     @user_id = options['user_id']
     @parent_reply_id = options['parent_reply_id']
+  end
+
+  def self.find_by_id(id)
+    reply = QuestionsDatabase.instance.execute(<<-SQL, id:id)
+      SELECT 
+        *
+      FROM
+        replies
+      WHERE
+        id = :id
+    SQL
+    Reply.new(reply.first)
+    
   end
 
   def self.find_by_user_id(user_id)
@@ -51,5 +65,22 @@ class Reply
     SQL
     self.id = QuestionsDatabase.instance.last_insert_row_id
   end
+
+  def author
+    User.find_by_id(user_id)
+  end
+
+  def question
+    Question.find_by_id(question_id)
+  end
+
+  def parent_reply
+    Reply.find_by_id(parent_reply_id)
+  end
+
+  # def child_replies
+  #   Reply.find_by_id(parent_reply_id)
+  # end
+
 
 end
