@@ -52,8 +52,9 @@ class Reply
     WHERE
       question_id = :question_id
     SQL
-    reply.map { |datum| Reply.new(datum) }
+    Reply.new(reply.first)
   end
+
 
   def create
     raise "#{self} already in database" if self.id
@@ -78,9 +79,22 @@ class Reply
     Reply.find_by_id(parent_reply_id)
   end
 
-  # def child_replies
-  #   Reply.find_by_id(parent_reply_id)
-  # end
+  def child_replies
+    Reply.find_by_parent_reply_id(@id)
+  end
+
+
+  def self.find_by_parent_reply_id(parent_reply_id)
+    reply = QuestionsDatabase.instance.execute(<<-SQL, parent_reply_id:parent_reply_id)
+    SELECT 
+      *
+    FROM
+      replies
+    WHERE
+      id = :parent_reply_id
+    SQL
+    Reply.new(reply.first)
+  end
 
 
 end
